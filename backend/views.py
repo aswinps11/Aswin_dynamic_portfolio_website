@@ -4,7 +4,7 @@ from .models import HomeContent, Skill, Education, Experience, Project, ContactM
 
 # Create your views here.
 def dashboard(request):
-    return render(request,'dashboard.html')
+    return render(request,'backend/dashboard.html')
 
 def homecontent(request):
     # Get or create the home content instance
@@ -38,7 +38,7 @@ def homecontent(request):
         else:
             messages.error(request, 'Please fill in all required fields.')
 
-    return render(request, 'homecontent.html', {'content': content})
+    return render(request, 'backend/homecontent.html', {'content': content})
 
 def resume(request):
     # Get or create the home content instance
@@ -164,7 +164,7 @@ def resume(request):
 
     educations = content.educations.all()
     experiences = content.experiences.all()
-    return render(request, 'resume.html', {
+    return render(request, 'backend/resume.html', {
         'content': content,
         'educations': educations,
         'experiences': experiences
@@ -234,7 +234,7 @@ def aboutme(request):
             messages.success(request, 'About Me content updated successfully!')
             return redirect('aboutme')
 
-    return render(request, 'aboutme.html', {'content': content})
+    return render(request, 'backend/aboutme.html', {'content': content})
 
 
 def portfolio(request):
@@ -279,7 +279,7 @@ def portfolio(request):
             return redirect("portfolio")
 
     projects = Project.objects.all().order_by("-id")
-    return render(request, "portfolio.html", {"projects": projects})
+    return render(request, "backend/portfolio.html", {"projects": projects})
 
 
 
@@ -301,7 +301,7 @@ def contact_submit(request):
 # Admin view to see messages
 def contact(request):
     messages = ContactMessage.objects.all().order_by('-created_at')
-    return render(request, 'contact.html', {'messages': messages})
+    return render(request, 'backend/contact.html', {'messages': messages})
 
 def delete_contact_message(request, id):
     msg = get_object_or_404(ContactMessage, id=id)
@@ -319,20 +319,20 @@ def register(request):
         password=request.POST.get('password')
         
         if not name or not email or not password:
-            return render(request, 'register.html', {'error': 'All fields are required.'})
+            return render(request, 'backend/register.html', {'error': 'All fields are required.'})
         
         if User.objects.filter(name=name).exists():
-            return render(request,'register.html',{'error':'Username already exists.'})
+            return render(request,'backend/register.html',{'error':'Username already exists.'})
         
         if User.objects.filter(email=email).exists():
-            return render(request,'register.html',{'error':'email already exists.'})
+            return render(request,'backend/register.html',{'error':'email already exists.'})
         
         user=User(name=name,email=email,password=password)
         user.save()
         
-        return render(request,'login.html',{'msg':'User successfully registered.'})
+        return render(request,'backend/login.html',{'msg':'User successfully registered.'})
     
-    return render(request,'register.html')
+    return render(request,'backend/register.html')
 
 
 # login
@@ -343,14 +343,14 @@ def login(request):
         
         try:
             user=User.objects.get(email=email,password=password)
-            return render(request,'dashboard.html',{'user':user})
+            return render(request,'backend/dashboard.html',{'user':user})
         
         except User.DoesNotExist:
-            return render(request,'login.html',{'error':'Invalid credentials.'})
+            return render(request,'backend/login.html',{'error':'Invalid credentials.'})
     
-    return render(request,'login.html')
+    return render(request,'backend/login.html')
 
 # logout
 def logout(request):
     request.session.flush()
-    return render(request,'login.html',{'msg':'You have been logged out successfully.'})
+    return render(request,'backend/login.html',{'msg':'You have been logged out successfully.'})

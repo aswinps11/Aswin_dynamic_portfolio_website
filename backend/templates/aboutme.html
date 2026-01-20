@@ -1,0 +1,131 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2 class="mb-4">About Me</h2>
+
+{% if messages %}
+    {% for message in messages %}
+        {% if message.tags == 'error' %}
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        {% else %}
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        {% endif %}
+    {% endfor %}
+{% endif %}
+
+<!-- Save About Me Content Form -->
+<form method="POST">
+    {% csrf_token %}
+    <!-- About Me Section -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5>About Me Section</h5>
+        </div>
+        <div class="card-body">
+            <div class="mb-3">
+                <label for="about_title" class="form-label">About Me Title</label>
+                <input type="text" class="form-control" id="about_title" name="about_title" value="{{ content.about_title }}">
+            </div>
+            <div class="mb-3">
+                <label for="about_paragraph1" class="form-label">About Me Paragraph 1</label>
+                <textarea class="form-control" id="about_paragraph1" name="about_paragraph1" rows="3">{{ content.about_paragraph1 }}</textarea>
+            </div>
+            <div class="mb-3">
+                <label for="about_paragraph2" class="form-label">About Me Paragraph 2</label>
+                <textarea class="form-control" id="about_paragraph2" name="about_paragraph2" rows="3">{{ content.about_paragraph2 }}</textarea>
+            </div>
+        </div>
+    </div>
+
+    <!-- Details Section -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5>Personal Details</h5>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="experience" class="form-label">Experience</label>
+                    <input type="text" class="form-control" id="experience" name="experience" value="{{ content.experience }}">
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="degree" class="form-label">Degree</label>
+                    <input type="text" class="form-control" id="degree" name="degree" value="{{ content.degree }}">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="location" class="form-label">Location</label>
+                    <input type="text" class="form-control" id="location" name="location" value="{{ content.location }}">
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="email" class="form-control" id="email" name="email" value="{{ content.email }}">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="phone" class="form-label">Phone</label>
+                    <input type="text" class="form-control" id="phone" name="phone" value="{{ content.phone }}">
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="availability" class="form-label">Availability</label>
+                    <input type="text" class="form-control" id="availability" name="availability" value="{{ content.availability }}">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary mb-4">Save All Changes</button>
+</form>
+
+<!-- Skills Section -->
+<div class="card mb-4">
+    <div class="card-header">
+        <h5>Skills Management</h5>
+    </div>
+    <div class="card-body">
+
+        <!-- Current Skills -->
+        {% if content.skills.all %}
+            <div class="mb-3">
+                <h6>Current Skills:</h6>
+                <div class="d-flex flex-wrap gap-2 mb-3">
+                    {% for skill in content.skills.all %}
+                        <form method="POST" class="d-inline">
+                            {% csrf_token %}
+                            <div class="badge bg-primary d-flex align-items-center gap-2 p-2">
+                                {{ skill.name }}
+                                <input type="hidden" name="delete_skill" value="{{ skill.id }}">
+                                <button type="submit" class="btn btn-sm btn-danger ms-1" 
+                                        onclick="return confirm('Are you sure you want to delete this skill?')">
+                                    <i class="bi bi-x"></i>
+                                </button>
+                            </div>
+                        </form>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endif %}
+
+        <!-- Add New Skill -->
+        <form method="POST">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="new_skill" class="form-label">Add New Skill</label>
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" id="new_skill" name="new_skill" 
+                           placeholder="Enter skill name">
+                    <button type="submit" name="add_skill" value="1" class="btn btn-success ms-2">Add Skill</button>
+                </div>
+            </div>
+        </form>
+
+    </div>
+</div>
+{% endblock %}

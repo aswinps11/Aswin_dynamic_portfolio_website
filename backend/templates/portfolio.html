@@ -1,0 +1,169 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h2 class="mb-4">Projects Management</h2>
+
+{% if messages %}
+  {% for message in messages %}
+    <div class="alert alert-{{ message.tags }} alert-dismissible fade show">
+      {{ message }}
+      <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+  {% endfor %}
+{% endif %}
+
+<!-- Add New Project -->
+<form method="POST" enctype="multipart/form-data" id="addProjectForm">
+  {% csrf_token %}
+
+  <div class="card mb-4">
+    <div class="card-header">
+      <h5>Add New Project</h5>
+    </div>
+
+    <div class="card-body">
+
+      <div class="mb-3">
+        <label class="form-label">Project Title</label>
+        <input type="text" name="title" class="form-control" required>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Project Date</label>
+        <input type="text" name="date" class="form-control" required>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Project Description</label>
+        <textarea name="description" class="form-control" rows="3"></textarea>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Technology Stack</label>
+        <input type="text" name="tech_stack" class="form-control" placeholder="Comma-separated technologies">
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Project File (ZIP / PDF)</label>
+        <input type="file" name="file" class="form-control">
+      </div>
+
+    </div>
+  </div>
+
+  <button type="submit" name="add_project" class="btn btn-primary">Save Project</button>
+</form>
+
+<!-- Existing Projects (Minimal Display) -->
+{% if projects %}
+<div class="card mt-5">
+  <div class="card-header">
+    <h5>Uploaded Projects</h5>
+  </div>
+
+  <div class="card-body">
+    {% for project in projects %}
+      <div class="d-flex justify-content-between align-items-center border p-2 mb-2" id="project-{{ project.id }}">
+        <div>
+          <strong>{{ project.title }}</strong>
+        </div>
+
+        <div class="d-flex gap-2">
+          <!-- Edit button -->
+          <button class="btn btn-sm btn-warning edit-project-btn"
+                  data-id="{{ project.id }}"
+                  data-title="{{ project.title|escape }}"
+                  data-date="{{ project.date|escape }}"
+                  data-description="{{ project.description|escape }}"
+                  data-tech-stack="{{ project.tech_stack|escape }}">
+            Edit
+          </button>
+
+          <!-- Delete button -->
+          <form method="POST" style="display:inline;">
+            {% csrf_token %}
+            <input type="hidden" name="delete_project" value="{{ project.id }}">
+            <button class="btn btn-sm btn-danger" onclick="return confirm('Delete this project?')">
+              Delete
+            </button>
+          </form>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+{% else %}
+  <p class="text-center mt-5 fs-5 text-muted">No projects uploaded</p>
+{% endif %}
+
+<!-- Hidden Edit Form -->
+<div id="editProjectForm" class="card mt-4" style="display: none;">
+  <div class="card-header">
+    <h5>Edit Project</h5>
+  </div>
+  <div class="card-body">
+    <form method="POST" enctype="multipart/form-data">
+      {% csrf_token %}
+      <input type="hidden" name="project_id" id="editProjectId">
+
+      <div class="mb-3">
+        <label class="form-label">Project Title</label>
+        <input type="text" class="form-control" name="title" id="editTitle" required>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Project Date</label>
+        <input type="text" class="form-control" name="date" id="editDate" required>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Project Description</label>
+        <textarea name="description" class="form-control" id="editDescription" rows="3"></textarea>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Technology Stack</label>
+        <input type="text" name="tech_stack" class="form-control" id="editTechStack">
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Project File (ZIP / PDF)</label>
+        <input type="file" name="file" class="form-control">
+      </div>
+
+      <button type="submit" name="edit_project" class="btn btn-primary">Update Project</button>
+      <button type="button" onclick="cancelEdit()" class="btn btn-secondary">Cancel</button>
+    </form>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Edit project buttons
+    document.querySelectorAll('.edit-project-btn').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            const id = this.dataset.id;
+            const title = this.dataset.title;
+            const date = this.dataset.date;
+            const description = this.dataset.description;
+            const techStack = this.dataset.techStack;
+
+            document.getElementById('editProjectId').value = id;
+            document.getElementById('editTitle').value = title;
+            document.getElementById('editDate').value = date;
+            document.getElementById('editDescription').value = description;
+            document.getElementById('editTechStack').value = techStack;
+
+            document.getElementById('editProjectForm').style.display = 'block';
+            window.scrollTo({top: document.getElementById('editProjectForm').offsetTop - 100, behavior: 'smooth'});
+        });
+    });
+});
+
+// Cancel edit
+function cancelEdit() {
+    document.getElementById('editProjectForm').style.display = 'none';
+}
+</script>
+
+{% endblock %}

@@ -1,0 +1,227 @@
+{% extends 'frontend/base.html' %}
+{% load static %}
+
+{% block title %}{{ portfolio.title }} - Portfolio Details{% endblock %}
+
+{% block body_class %}portfolio-details-page{% endblock %}
+
+{% block content %}
+
+  <!-- Favicons -->
+  <link href="{% static 'assets/img/favicon.png' %}" rel="icon">
+  <link href="{% static 'assets/img/apple-touch-icon.png' %}" rel="apple-touch-icon">
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Mulish:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="{% static 'assets/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/bootstrap-icons/bootstrap-icons.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/aos/aos.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/glightbox/css/glightbox.min.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/swiper/swiper-bundle.min.css' %}" rel="stylesheet">
+
+  <!-- Main CSS File -->
+  <link href="{% static 'assets/css/main.css' %}" rel="stylesheet">
+
+  <!-- =======================================================
+  * Template Name: Craftivo
+  * Template URL: https://bootstrapmade.com/craftivo-bootstrap-portfolio-template/
+  * Updated: Oct 04 2025 with Bootstrap v5.3.8
+  * Author: BootstrapMade.com
+  * License: https://bootstrapmade.com/license/
+  ======================================================== -->
+</head>
+
+<body class="portfolio-details-page">
+
+  <main class="main">
+
+    <!-- Page Title -->
+    <div class="page-title light-background">
+      <div class="container">
+        <nav class="breadcrumbs">
+          <ol>
+            <li><a href="{% url 'index' %}">Home</a></li>
+            <li class="current">Portfolio Details</li>
+          </ol>
+        </nav>
+        <h1>{{ portfolio.title }}</h1>
+      </div>
+    </div><!-- End Page Title -->
+
+    <!-- Portfolio Details Section -->
+    <section id="portfolio-details" class="portfolio-details section">
+
+      <!-- Section Title -->
+      <div class="container section-title" data-aos="fade-up">
+        <span class="subtitle">Portfolio Details</span>
+        <h2>Portfolio Details</h2>
+        <p>Necessitatibus eius consequatur ex aliquid fuga eum quidem sint consectetur velit. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium totam rem aperiam</p>
+      </div><!-- End Section Title -->
+
+      <div class="container" data-aos="fade-up" data-aos-delay="100">
+
+        <div class="row gy-5">
+
+          <div class="col-lg-8">
+
+            <div class="portfolio-details-slider swiper init-swiper">
+              <script type="application/json" class="swiper-config">
+                {
+                  "loop": true,
+                  "speed": 600,
+                  "autoplay": {
+                    "delay": 4000
+                  },
+                  "slidesPerView": 1,
+                  "spaceBetween": 0,
+                  "effect": "fade",
+                  "pagination": {
+                    "el": ".swiper-pagination",
+                    "type": "bullets",
+                    "clickable": true
+                  }
+                }
+              </script>
+              <div class="swiper-wrapper">
+
+                <div class="swiper-slide">
+                  <img src="{% static 'assets/img/portfolio/portfolio-3.webp' %}" alt="Portfolio Image" class="img-fluid">
+                </div>
+
+                <div class="swiper-slide">
+                  <img src="{% static 'assets/img/portfolio/portfolio-6.webp' %}" alt="Portfolio Image" class="img-fluid">
+                </div>
+
+                <div class="swiper-slide">
+                  <img src="{% static 'assets/img/portfolio/portfolio-9.webp' %}" alt="Portfolio Image" class="img-fluid">
+                </div>
+
+                <div class="swiper-slide">
+                  <img src="{% static 'assets/img/portfolio/portfolio-11.webp' %}" alt="Portfolio Image" class="img-fluid">
+                </div>
+
+              </div>
+              <div class="swiper-pagination"></div>
+            </div>
+
+            <div class="portfolio-content" data-aos="fade-up" data-aos-delay="200">
+              <h2>{{ portfolio.title }}</h2>
+
+              <div class="meta-info">
+                <span class="date"><i class="bi bi-calendar"></i> {{ portfolio.date }}</span>
+                <span class="category"><i class="bi bi-tag"></i> {{ portfolio.category }}</span>
+                <span class="client"><i class="bi bi-building"></i> {{ portfolio.client }}</span>
+              </div>
+
+              <p>
+                {{ portfolio.description }}
+              </p>
+
+              <h3>Project Overview</h3>
+              <p>
+                {{ portfolio.overview }}
+              </p>
+
+              <div class="highlights-box">
+                <h4>Key Highlights</h4>
+                <ul>
+                  {% for highlight in portfolio.highlights %}
+                  <li><i class="bi bi-check-circle"></i> {{ highlight }}</li>
+                  {% endfor %}
+                </ul>
+              </div>
+
+              <h3>Technical Implementation</h3>
+              <p>
+                {{ portfolio.technical_implementation }}
+              </p>
+
+              <blockquote>
+                <i class="bi bi-quote quote-icon"></i>
+                <p>
+                  {{ portfolio.quote }}
+                </p>
+                <div class="author">
+                  <img src="{% static 'assets/img/person/person-m-7.webp' %}" alt="Author">
+                  <div class="author-info">
+                    <h5>{{ portfolio.author_name }}</h5>
+                    <span>{{ portfolio.author_role }}</span>
+                  </div>
+                </div>
+              </blockquote>
+
+              <p>
+                {{ portfolio.additional_description }}
+              </p>
+
+            </div>
+
+          </div>
+
+          <div class="col-lg-4">
+
+            <div class="sidebar" data-aos="fade-up" data-aos-delay="200">
+
+              <div class="info-card">
+                <h3>Project Details</h3>
+                <div class="info-item">
+                  <span class="label">Client</span>
+                  <span class="value">{{ portfolio.client }}</span>
+                </div>
+                <div class="info-item">
+                  <span class="label">Category</span>
+                  <span class="value">{{ portfolio.category }}</span>
+                </div>
+                <div class="info-item">
+                  <span class="label">Date</span>
+                  <span class="value">{{ portfolio.date }}</span>
+                </div>
+                <div class="info-item">
+                  <span class="label">Duration</span>
+                  <span class="value">{{ portfolio.duration }}</span>
+                </div>
+                <div class="info-item">
+                  <span class="label">Technologies</span>
+                  <span class="value">{{ portfolio.technologies }}</span>
+                </div>
+                <a href="{{ portfolio.live_url }}" class="btn-primary" target="_blank">
+                  <i class="bi bi-box-arrow-up-right"></i> View Live Project
+                </a>
+              </div>
+
+              <div class="share-card" data-aos="fade-up" data-aos-delay="300">
+                <h3>Share This Project</h3>
+                <div class="social-links">
+                  <a href="#" class="facebook"><i class="bi bi-facebook"></i></a>
+                  <a href="#" class="twitter"><i class="bi bi-twitter"></i></a>
+                  <a href="#" class="linkedin"><i class="bi bi-linkedin"></i></a>
+                  <a href="#" class="pinterest"><i class="bi bi-pinterest"></i></a>
+                </div>
+              </div>
+
+              <div class="tags-card" data-aos="fade-up" data-aos-delay="400">
+                <h3>Tags</h3>
+                <div class="tags">
+                  {% for tag in portfolio.tags %}
+                  <a href="#">{{ tag }}</a>
+                  {% endfor %}
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section><!-- /Portfolio Details Section -->
+
+  </main>
+
+{% endblock %}

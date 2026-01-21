@@ -19,8 +19,10 @@ A dynamic, full-stack portfolio website built with **Django** and **Bootstrap**.
 
 **Backend:**
 - Django 4.2
-- SQLite (development)
+- PostgreSQL (production) / SQLite (development)
 - Python 3.x
+- Gunicorn (production server)
+- WhiteNoise (static file serving)
 
 **Frontend:**
 - Bootstrap 5
@@ -32,6 +34,8 @@ A dynamic, full-stack portfolio website built with **Django** and **Bootstrap**.
 - Isotope (portfolio filtering)
 - Typed.js (text animation)
 - Swiper (carousel)
+- python-dotenv (environment configuration)
+- dj-database-url (database URL parsing)
 
 ## Project Structure
 
@@ -169,6 +173,45 @@ portfolio/
 - Add new Django apps in the `INSTALLED_APPS` list
 
 ## Deployment
+
+### Deploy to Render (Free Hosting)
+
+1. **Create Render Account**
+   - Sign up at https://render.com
+
+2. **Create PostgreSQL Database**
+   - Create a free PostgreSQL instance on Render
+   - Copy the DATABASE_URL
+
+3. **Connect GitHub & Deploy**
+   - Connect your GitHub repository to Render
+   - Set environment variables in Render dashboard:
+     ```
+     DJANGO_SECRET_KEY=your-secret-key-here
+     DATABASE_URL=your-postgres-url
+     ALLOWED_HOSTS=yourdomain.onrender.com
+     ENVIRONMENT=production
+     DEBUG=False
+     ```
+   - Deploy!
+
+4. **Post-Deployment Setup**
+   - The `build.sh` script automatically:
+     - Installs dependencies
+     - Runs `collectstatic` (collects static files)
+     - Runs `migrate` (applies database migrations)
+
+### Environment Variables Required
+
+```
+DEBUG=False
+ENVIRONMENT=production
+DJANGO_SECRET_KEY=your-secret-key-here
+ALLOWED_HOSTS=yourdomain.com,www.yourdomain.com
+DATABASE_URL=postgresql://user:password@host:port/database
+```
+
+### Local Development
 
 For production deployment:
 
